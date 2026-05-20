@@ -16,6 +16,10 @@ export function handleRolls(msgContent: string) {
       msg = msg.replace(/(\d*)?[#]/i, ""); //Remove da mensagem a parte usada para definir quantas vezes o dado será rolado.
     }
 
+    if (times > 100) {
+      return "❌ Parcela essas rolagens ai meu mano.";
+    }
+
     const rollAndMessage =
       msg.match(/(?:\s+((?:\d+\s*)?[^0-9dD\+\-\*\/\(\)].*))?$/) ?? [];
 
@@ -74,7 +78,7 @@ function responseDice(message: string, matches: string[]) {
       replace = sortDiceResults(replace);
 
       resultFinal = resultFinal.replace(match, replace);
-      replace = replace.replace(diceMaxValue.toString(), `**${diceMaxValue}**`); // deixa o maximo valor em negrito
+      replace = replace.replace(diceMaxValue.toString(), `**${diceMaxValue}**`); //Deixa o valor maximo do dado em negrito ex: dado = 1d20, diceMaxValue = 20, o resultado 20 se torna **20**, e fica em negrito no discord
       message = message.replace(
         new RegExp(`(?<!\\] )${match}`),
         replace + ` ${match}`,

@@ -64,4 +64,14 @@ client.on('messageCreate', (message) => {
     );
 });
 
+import { TextChannel } from "discord.js";
+
+const channel = client.channels.cache.get(
+    "ID_DO_CANAL"
+);
+
+if (channel instanceof TextChannel) {
+
+    await channel.send("Olá!");
+}
 */
