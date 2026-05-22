@@ -44,3 +44,5 @@ coverage/
 
 # Arquivos locais
 guildSettings.json
+/src/generated/prisma
+prisma/dev.db

@@ -1,63 +1,46 @@
 import fs from "fs";
 import path from "path";
 
-const settingsPath = path.join(
-    __dirname,
-    "../storage/guildSettings.json"
-);
+const settingsPath = path.join(__dirname, "../storage/guildSettings.json");
 
 export type GuildSettings = {
-    [guildId: string]: {
-        channelId?: string;
-        insults?: boolean;
+  [guildId: string]: {
+    channelId?: string;
+    insults?: boolean;
+    users?: {
+      [userId: string]: {
+        ficha: string;
+      };
     };
+  };
 };
 
 export function loadSettings(): GuildSettings {
+  if (!fs.existsSync(settingsPath)) {
+    fs.writeFileSync(settingsPath, "{}");
+  }
 
-    if (!fs.existsSync(settingsPath)) {
-        fs.writeFileSync(settingsPath, "{}");
-    }
+  const raw = fs.readFileSync(settingsPath, "utf8");
 
-    const raw = fs.readFileSync(
-        settingsPath,
-        "utf8"
-    );
+  if (!raw.trim()) {
+    return {};
+  }
 
-    if (!raw.trim()) {
-        return {};
-    }
+  try {
+    return JSON.parse(raw);
+  } catch (error) {
+    console.error("Erro ao carregar settings:", error);
 
-    try {
-
-        return JSON.parse(raw);
-
-    } catch (error) {
-
-        console.error(
-            "Erro ao carregar settings:",
-            error
-        );
-
-        return {};
-    }
+    return {};
+  }
 }
 
-export function saveSettings(
-    settings: GuildSettings
-) {
-
-    fs.writeFileSync(
-        settingsPath,
-        JSON.stringify(settings, null, 4)
-    );
+export function saveSettings(settings: GuildSettings) {
+  fs.writeFileSync(settingsPath, JSON.stringify(settings, null, 4));
 }
 
-export function getGuildSettings(
-    guildId: string
-) {
+export function getGuildSettings(guildId: string) {
+  const settings = loadSettings();
 
-    const settings = loadSettings();
-
-    return settings[guildId] ?? {};
+  return settings[guildId] ?? {};
 }

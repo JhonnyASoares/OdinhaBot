@@ -1,14 +1,17 @@
 import { Client, Message } from "discord.js";
 import { commands } from "./commands";
 import { config } from "./config";
-import { deployCommands } from "./deploy-commands";
+import { deployCommands } from "./deploy";
 import { handleMessage } from "./events/messageCreate";
+import { getOrCreate } from "./models/guild";
+import prisma from "./prisma";
 
 const client = new Client({
   intents: ["Guilds", "GuildMessages", "DirectMessages", "MessageContent"],
 });
 
 client.once("ready", async () => {
+  await prisma.$connect();
   //Atualizando os comandos em todos os servidores
   for (const guild of client.guilds.cache.values()) {
     await deployCommands({
@@ -19,6 +22,7 @@ client.once("ready", async () => {
 });
 
 client.on("guildCreate", async (guild) => {
+  await getOrCreate(guild.id);
   await deployCommands({ guildId: guild.id });
 });
 
