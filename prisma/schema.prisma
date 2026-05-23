@@ -33,6 +33,8 @@ model RpgSheetSet {
 
   cell     String
 
+  alias    String?
+
   dice     String?
 
   action  RpgSheetAction @default(get)

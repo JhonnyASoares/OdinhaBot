@@ -6,6 +6,7 @@ type UpdateOrCreateProps = {
   name: string;
   guildId: string;
   cell: string;
+  alias?: string;
   dice?: string;
   action?: RpgSheetAction;
 };
@@ -15,6 +16,7 @@ export async function updateOrCreate({
   guildId,
   cell,
   dice,
+  alias,
   action,
 }: UpdateOrCreateProps) {
   try {
@@ -29,6 +31,7 @@ export async function updateOrCreate({
       update: {
         cell,
         dice,
+        alias,
         action,
       },
 
@@ -37,6 +40,7 @@ export async function updateOrCreate({
         guildId,
         cell,
         dice,
+        alias,
         action,
       },
     });
@@ -55,6 +59,19 @@ export async function getOnly(name: string, guildId: string) {
           name,
           guildId,
         },
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    throw new Error("Erro ao buscar sheet set.");
+  }
+}
+
+export async function get(guildId: string) {
+  try {
+    return await prisma.rpgSheetSet.findMany({
+      where: {
+        guildId: guildId,
       },
     });
   } catch (error) {
