@@ -1,5 +1,5 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
-import { loadSettings, saveSettings } from "../utils/guildSettings";
+import { updateOrCreate as getUser } from "../models/user";
 
 export const data = new SlashCommandBuilder()
   .setName("register_sheet")
@@ -19,11 +19,6 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     });
   }
 
-  const settings = loadSettings();
-  if (!settings[guildId]) {
-    settings[guildId] = {};
-  }
-
   const spreadsheetId = extractSpreadsheetId(url);
 
   if (!spreadsheetId) {
@@ -35,15 +30,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
   const userId = interaction.user.id;
 
-  if (!settings[guildId].users) {
-    settings[guildId].users = {};
-  }
-
-  settings[guildId].users[userId] = {
-    ficha: spreadsheetId,
-  };
-
-  saveSettings(settings);
+  getUser({ id: userId, guildId, ficha: spreadsheetId });
 
   await interaction.reply({
     content: "Planilha registrada com sucesso!",

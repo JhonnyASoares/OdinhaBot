@@ -2998,15 +2998,15 @@ export namespace Prisma {
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
     id_guildId?: UserIdGuildIdCompoundUniqueInput
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
+    id?: StringFilter<"User"> | string
     ficha?: StringNullableFilter<"User"> | string | null
     guildId?: StringFilter<"User"> | string
     guild?: XOR<GuildScalarRelationFilter, GuildWhereInput>
-  }, "id" | "id_guildId">
+  }, "id_guildId">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder

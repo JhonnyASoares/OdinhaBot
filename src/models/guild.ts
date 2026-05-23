@@ -6,15 +6,20 @@ type UpdateGuildProps = {
   rolls_channel?: string;
 };
 
-export async function getOrCreate(guildId: string) {
+export async function getOrCreate(guildId: string, name: string) {
   try {
     return await prisma.guild.upsert({
       where: {
         id: guildId,
       },
-      update: {},
+
+      update: {
+        name,
+      },
+
       create: {
         id: guildId,
+        name,
       },
     });
   } catch (error) {

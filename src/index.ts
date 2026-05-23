@@ -22,7 +22,7 @@ client.once("ready", async () => {
 });
 
 client.on("guildCreate", async (guild) => {
-  await getOrCreate(guild.id);
+  await getOrCreate(guild.id, guild.name);
   await deployCommands({ guildId: guild.id });
 });
 

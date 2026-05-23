@@ -6,20 +6,16 @@ export const data = new SlashCommandBuilder()
   .setDescription("Responde com pong e testa o banco");
 
 export async function execute(interaction: ChatInputCommandInteraction) {
+  await interaction.deferReply();
+
   try {
-    await interaction.deferReply();
-
     if (!interaction.guildId) {
-      return interaction.reply({
-        content: "Esse comando só funciona em servidores.",
-
-        ephemeral: true,
-      });
+      return interaction.editReply("Esse comando só funciona em servidores.");
     }
 
-    await getOrCreate(interaction.guildId);
+    await getOrCreate(interaction.guildId, interaction.guild!.name);
 
-    await interaction.reply("Moshi Moshi!");
+    await interaction.editReply("Moshi Moshi!");
   } catch (error) {
     console.error(error);
     await interaction.editReply("Erro ao acessar o banco de dados.");
