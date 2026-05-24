@@ -6,7 +6,6 @@ export function handleRolls(msgContent: string) {
     let msg = msgContent;
 
     msg = msg.replace(/([\+\-\*\/\(\)])\s+([0-9])/g, "$1$2"); //Remove espaços entre operadores matemáticos e números a direita.
-
     let vezes = msg.match(/(\d*)?[#]/i); //Procura se existe um # na mensagem e, opcionalmente, um número antes dele.
 
     let times = 1;
@@ -21,7 +20,7 @@ export function handleRolls(msgContent: string) {
     }
 
     const rollAndMessage =
-      msg.match(/(?:\s+((?:\d+\s*)?[^0-9dD\+\-\*\/\(\)].*))?$/) ?? [];
+      msg.match(/(?:\s+([a-zA-Z]+(?:\s+[a-zA-Z]+)*))?$/) ?? [];
 
     let aditionalMessage = rollAndMessage[1] ? rollAndMessage[1].trim() : "";
 
@@ -29,7 +28,7 @@ export function handleRolls(msgContent: string) {
 
     msg = msg.replace(/\b(?<!\d)d/g, "1d");
     msg = msg.replace(/\s/g, ""); //Remove todos os espaços
-
+    msg = msg.replace(/D/g, "d");
     const matches = msg.match(/\b[0-9]+d[0-9]+\b/g) ?? [];
 
     let finalMessage = aditionalMessage ? `**${aditionalMessage}**\n` : "";

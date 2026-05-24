@@ -12,7 +12,6 @@ export async function getCellValue(spreadsheetId: string, range: string) {
     key: process.env.GOOGLE_SHEETS_API,
   });
   //console.log(response);
-  //console.log(response.data.values);
 
   return response.data.values?.[0]?.[0] ?? null;
 }

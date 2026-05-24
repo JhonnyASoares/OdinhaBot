@@ -5,7 +5,7 @@ import { updateOrCreate } from "../models/rpg_sheet";
 export const data = new SlashCommandBuilder()
   .setName("rpg_sets")
   .setDescription(
-    "Define rolagens automaticas. Ex: define >iniciativa 1d20 Character!AE24 player: >iniciativa",
+    "Define rolagens automaticas. Ex: define >{name} {dice} + {cell} player: >{name}",
   )
   .addStringOption((option) =>
     option
@@ -15,17 +15,16 @@ export const data = new SlashCommandBuilder()
   )
   .addStringOption((option) =>
     option
-      .setName("dice")
-      .setDescription("Dado que o bot irá rolar ex: 1d20, 2d10, 5#d20")
-      .setRequired(true),
-  )
-  .addStringOption((option) =>
-    option
       .setName("cell")
       .setDescription(
         "Planilha!Celula ex: Character!AB11 (Obs: é possivel colocar range)",
       )
       .setRequired(true),
+  )
+  .addStringOption((option) =>
+    option
+      .setName("dice")
+      .setDescription("Dado que o bot irá rolar ex: 1d20, 2d10, 5#d20"),
   )
   .addStringOption((option) =>
     option
@@ -54,12 +53,13 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     ) as RpgSheetAction | null;
 
     const alias = interaction.options.getString("alias") as string | null;
+    const dice = interaction.options.getString("dice") as string | null;
 
     await updateOrCreate({
       name: interaction.options.getString("name")!,
       guildId: interaction.guildId,
       cell: interaction.options.getString("cell")!,
-      dice: interaction.options.getString("dice")!,
+      dice: dice ?? undefined,
       alias: alias ?? undefined,
       action: action ?? undefined,
     });

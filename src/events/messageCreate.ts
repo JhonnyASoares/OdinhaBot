@@ -59,7 +59,13 @@ async function rpgSets(message: Message) {
       const cmd = await getCommand(command, message.guildId!);
       if (cmd) {
         const cell = await getCellValue(ficha, cmd.cell);
-        const msg = `${cmd.dice} + ${cell} ${cmd.alias ?? ""}`;
+        if (!cell) {
+          return await message.reply(
+            "❌ Nenhum valor encontrado, confira se a celula está correta",
+          );
+        }
+        const dice = cmd.dice ? `${cmd.dice} +` : "";
+        const msg = `${dice} ${cell} ${cmd.alias ?? ""}`;
         return await message.reply(handleRolls(msg));
       }
       return await message.reply("❌ Comando não registrado");
