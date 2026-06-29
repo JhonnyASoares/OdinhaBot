@@ -84,8 +84,12 @@ function responseDice(message: string, matches: string[]) {
       );
     }
 
-    resultFinal = resultFinal.replace(/\[|\]/g, "");
+    // Tratamento para a operação matematica
+    // Trasforma [] em ()
+    resultFinal = resultFinal.replace(/\[/g, "(").replace(/\]/g, ")");
+    // Substitui ", " por "+"
     resultFinal = resultFinal.replace(/, /g, "+");
+    // Substitui "," por "."
     resultFinal = resultFinal.replace(/,/g, ".");
 
     const total = parseFloat(evaluate(resultFinal).toFixed(2)); // toFixed fixa casas decimais, parsefloat remove .00
@@ -100,6 +104,11 @@ function responseDice(message: string, matches: string[]) {
   }
 }
 
+/**
+ *
+ * @param text
+ * @returns O Valor das rolagens de maneira decrescente
+ */
 function sortDiceResults(text: string) {
   const values = text
     .replace(/\[|\]/g, "")

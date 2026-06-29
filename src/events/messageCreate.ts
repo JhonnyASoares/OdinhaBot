@@ -23,7 +23,7 @@ export async function handleMessage(message: Message) {
     if (!guild?.rolls_channel || guild.rolls_channel === message.channelId) {
       var msg = message.content;
       //Prefixo para ver se é uma rolagem de dados
-      const dicePrefixRegex = /(\d*)[#]?(\d*)?[dD](?=\d*[1-9])\d+/i;
+      const dicePrefixRegex = /^\s*(\d*)[#]?(\d*)?[dD](?=\d*[1-9])\d+/i;
       const diceTest = dicePrefixRegex.test(msg);
 
       if (message.content.startsWith(">")) {
@@ -53,8 +53,8 @@ async function rpgSets(message: Message) {
       return await message.reply("❌ Ficha não registrada");
     }
     const msgCont = message.content;
-    const command = msgCont.match(/^>(\S+)/)?.[1];
-    //const [, command, args] = msgCont.match(/^>(\S+)\s*(.*)?$/) ?? [];
+    //const command = msgCont.match(/^>(\S+)/)?.[1];
+    const [, command, args] = msgCont.match(/^>(\S+)\s*(.*)?$/) ?? [];
     if (command) {
       const cmd = await getCommand(command, message.guildId!);
       if (cmd) {
@@ -65,7 +65,8 @@ async function rpgSets(message: Message) {
           );
         }
         const dice = cmd.dice ? `${cmd.dice} +` : "";
-        const msg = `${dice} ${cell} ${cmd.alias ?? ""}`;
+        const msg = `${dice} ${cell} ${args ?? ""} ${cmd.alias ?? ""}`;
+        console.log(msg);
         return await message.reply(handleRolls(msg));
       }
       return await message.reply("❌ Comando não registrado");
