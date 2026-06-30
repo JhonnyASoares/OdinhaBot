@@ -77,7 +77,10 @@ function responseDice(message: string, matches: string[]) {
       replace = sortDiceResults(replace);
 
       resultFinal = resultFinal.replace(match, replace);
-      replace = replace.replace(diceMaxValue.toString(), `**${diceMaxValue}**`); //Deixa o valor maximo do dado em negrito ex: dado = 1d20, diceMaxValue = 20, o resultado 20 se torna **20**, e fica em negrito no discord
+      replace = replace.replace(
+        new RegExp(diceMaxValue.toString(), "g"),
+        `**${diceMaxValue}**`,
+      ); //Deixa o valor maximo do dado em negrito ex: dado = 1d20, diceMaxValue = 20, o resultado 20 se torna **20**, e fica em negrito no discord
       message = message.replace(
         new RegExp(`(?<!\\] )${match}`),
         replace + ` ${match}`,
