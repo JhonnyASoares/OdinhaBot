@@ -23,7 +23,7 @@ export async function handleMessage(message: Message) {
     if (!guild?.rolls_channel || guild.rolls_channel === message.channelId) {
       var msg = message.content;
       //Prefixo para ver se é uma rolagem de dados
-      const dicePrefixRegex = /^\s*\(?\s*(\d*)[#]?(\d*)?[dD](?=\d*[1-9])\d+/i;
+      const dicePrefixRegex = /^\s*(?:(\d*)#)?[\s(]*(\d*)?[dD](?=\d*[1-9])\d+/i;
       const diceTest = dicePrefixRegex.test(msg);
 
       if (message.content.startsWith(">")) {
